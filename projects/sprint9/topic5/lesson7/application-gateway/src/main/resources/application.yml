@@ -1,0 +1,21 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: application-gateway
+  cloud:
+    discovery:
+      client:
+        simple:
+          instances:
+            property-printer-service: # Мы не используем Service Discovery, поэтому перечислим хосты самостоятельно
+              - uri: http://127.0.0.1:9001
+              - uri: http://127.0.0.1:9002
+    gateway:
+      routes:
+        - id: property-printer-route  # ID роута
+          uri: lb://property-printer-service  # URI микросервиса, на который следует перенаправлять запрос
+          predicates:
+            - Path=/property-printer/** # URI поступающего в Gateway запроса, с которым мэтчится роут
+          filters:
+            - RewritePath=/property-printer/?(?<segment>.*), /$\{segment} # Фильтр, который модифицирует запрос к целевому сервису (убирается имя сервиса в начале)

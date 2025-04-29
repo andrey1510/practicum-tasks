@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<body>
+<h1>Farm Dashboard</h1>
+
+<section th:replace="~{fragments/animals :: animalsFragment(${animals})}"></section>
+<section th:replace="~{fragments/crops :: cropsFragment(${crops})}"></section>
+<section th:replace="~{fragments/sales :: salesFragment(${sales})}"></section>
+</body>
+</html>
