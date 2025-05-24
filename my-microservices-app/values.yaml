@@ -1,0 +1,17 @@
+# my-microservices-app/values.yaml
+customer-db:
+  auth:
+    database: customerdb
+    username: customer_user
+    # Use existingSecret or provide password (less secure for production)
+    # existingSecret: "{{ .Release.Name }}-customer-db-postgresql" # Name of the secret to use/create
+    password: "changeM3Customer!" # Example: Not recommended for production
+
+customer-service:
+  config:
+    # --- CORRECTED DB URL --- Using '<ReleaseName>-<Alias>' service name convention
+    database_url: "jdbc:postgresql://{{ .Release.Name }}-customer-db:5432/customerdb"
+    # Secret reference for password is more secure
+    database_username: "customer_user"
+    # database_password_secret: "{{ .Release.Name }}-customer-db-postgresql" # Reference to secret created by DB chart
+    # database_password_secret_key: "postgresql-password" # Key within the secret

@@ -1,0 +1,20 @@
+image:
+  repository: customer-service  # Default to local image name
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "0.0.1-SNAPSHOT"         # Default tag matching build
+
+service:
+  port: 80
+
+config:
+  some_other_config: "default_value"
+  # Database details are expected to be provided by the umbrella chart
+  # These are placeholders and should be overridden
+  database_url: "jdbc:postgresql://placeholder-db:5432/placeholder"
+  database_username: "placeholder_user"
+
+  ingress:
+    enabled: true
+    className: "nginx"
+    hosts:
+      - host: customer.myapp.local
