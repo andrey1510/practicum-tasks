@@ -1,0 +1,102 @@
+servers:
+  - url: https://api.example.com/v1
+    description: Основной сервер для работы с API
+  - url: http://localhost:{port}/{environment}
+    description: Локальный сервер разработки
+    variables:
+      port:
+        default: "8080"
+        description: Номер порта
+      environment:
+        default: "development"
+        enum:
+          - "development"
+          - "testing"
+
+paths:
+  /books/{bookId}:
+    get:
+      summary: Получить информацию о книге
+      description: Возвращает информацию о книге по её идентификатору
+      parameters:
+        - $ref: '#/components/parameters/bookId'
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: Книга не найдена
+
+components:
+  parameters:
+    bookId:
+      name: bookId
+      in: path
+      description: Идентификатор книги
+      required: true
+      schema:
+        type: integer
+  schemas:
+    Book:
+      type: object
+      required:
+        - id
+        - title
+        - author
+        - year
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        author:
+          type: string
+        year:
+          type: integer
+
+
+responses:
+  '200':
+    description: Успешный ответ
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+            - name
+            - email
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            email:
+              type: string
+  '404':
+    description: Пользователь не найден
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          example:
+            error: "Пользователь не найден"
+  '5XX':
+    description: Внутренняя ошибка сервера
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          example:
+
+
+

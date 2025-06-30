@@ -1,0 +1,22 @@
+input {
+  kafka {
+    bootstrap_servers => "localhost:9092"
+    topics => ["weather-logs", "foreign-weather-logs"]
+    group_id => "yandex-group"
+    decorate_events => extended
+  }
+}
+filter {
+  mutate {
+    copy => { "[@metadata][kafka][topic]" => "source"}
+  }
+}
+output {
+  elasticsearch {
+    hosts => ["http://localhost:9200", "http://192.168.1.2:9200"]
+    index => "practicum-index"
+    retry_on_conflict => 3
+    action => "create"
+    workers => 4
+  }
+}

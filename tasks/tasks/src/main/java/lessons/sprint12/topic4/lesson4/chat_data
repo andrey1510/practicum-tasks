@@ -1,0 +1,22 @@
+input {
+  file {
+    path => "/home/yandex/data/chat_data.log"
+    start_position => "beginning"
+    sincedb_path => "/dev/null"
+    mode => "tail"
+  }
+}
+filter {
+  grok {
+    match => { "message" => "%{TIMESTAMP_ISO8601:timestamp} %{USERNAME:user} \[%{DATA:class}\]:%{GREEDYDATA:message}"}
+  }
+  mutate {
+    replace => { "user" => "***" }
+    remove_field => [ "message" ]
+  }
+}
+output {
+  stdout {
+    codec => json
+  }
+}
